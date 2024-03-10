@@ -49,12 +49,17 @@ limitations under the License. -->
         </button>
         <h1>final predict:<p id="final_output">none</p>
         </h1>
-        <div style="position: relative;">
+        <div style="position: relative;display: flex;flex-direction: row">
             <video id="webcam" autoplay playsinline></video>
             <canvas class="output_canvas" id="output_canvas" width="1280" height="720"
                     style="position: absolute; left: 0; top: 0;"></canvas>
-            <p id='gesture_output1' class="output">
-            <p id='gesture_output2' class="output">
+            <div style="display: flex;flex-direction: column">
+                <p id='gesture_output1' class="output">
+                <p id='gesture_output2' class="output">
+            </div>
+
+
+
         </div>
     </div>
 </section>
