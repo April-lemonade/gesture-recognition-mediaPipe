@@ -228,7 +228,7 @@ async function predictWebcam() {
         // const point = [results.landmarks[0][0].x, results.landmarks[0][0].y, results.landmarks[0][0].z];
         // const point1 = [results.landmarks[1][0].x, results.landmarks[1][0].y, results.landmarks[1][0].z];
 
-        if (categoryName === categoryName1 && categoryScore1 > 75 && categoryScore > 75 && dist < 0.45) {
+        if (categoryName === categoryName1 && categoryScore1 > 75 && categoryScore > 75 && dist < 0.6) {
             finalOutput.innerText = categoryName
         } else {
             finalOutput.innerText = "none"
