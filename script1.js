@@ -23,6 +23,7 @@ let webcamRunning = false;
 const videoHeight = "360px";
 const videoWidth = "480px";
 let lastResult = "";
+let lastResults = []
 // Before we can use HandLandmarker class we must wait for it to finish
 // loading. Machine Learning models can be large and take a moment to
 // get everything needed to run.
@@ -233,7 +234,7 @@ async function predictWebcam() {
         console.log(video1.src)
         if (categoryName === categoryName1 && categoryScore1 > 75 && categoryScore > 75) {
             finalOutput.innerText = categoryName
-            if (video1.style.display === "none") {
+            if (video1.style.display === "none" && lastResults.filter((item) => item === categoryName).length === 60) {
                 video1.style.display = "block";
                 video1.src = "/video/wan.mp4";
                 enableWebcamButton.style.display = "none";
@@ -242,10 +243,17 @@ async function predictWebcam() {
                     video1.src = "";
                     // enableWebcamButton.style.display = "block";
                     lastResult = "";
+                    lastResults = [];
                 })
+                lastResults = []
+            } else if (lastResults[lastResults.length - 1] === categoryName || lastResults.length === 0) {
+                lastResults.push(categoryName)
+            } else if (lastResults[lastResults.length - 1] !== categoryName) {
+                lastResults = []
             }
-            lastResult = categoryName
-
+            // lastResult = categoryName
+            // lastResults.append(categoryName)
+            // if (lastResults.length > 10) lastResults.slice(0, 9);
             // console.log(video1.src)
         } else {
             finalOutput.innerText = "none";
