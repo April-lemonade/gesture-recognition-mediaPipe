@@ -17,7 +17,7 @@ import {
 const demosSection = document.getElementById("demos");
 let gestureRecognizer;
 let runningMode = "IMAGE";
-let num_hand = 2
+let num_hand = 2;
 let enableWebcamButton;
 let webcamRunning = false;
 const videoHeight = "360px";
@@ -25,6 +25,13 @@ const videoWidth = "480px";
 let lastResult = "";
 let lastResults = [];
 let gestures = ["wan1"];
+let steps = [["wan0", "wan1"]];
+let allCount = 0;
+let currentCount = 0;
+const gestureImg = document.getElementById("gestureImg");
+let newGes;
+let recorded = []
+
 // Before we can use HandLandmarker class we must wait for it to finish
 // loading. Machine Learning models can be large and take a moment to
 // get everything needed to run.
@@ -46,10 +53,17 @@ const createGestureRecognizer = async () => {
     demosSection.classList.remove("invisible");
 };
 createGestureRecognizer();
-let index = Math.random() * (gestures.length - 1);
-let currentGesture = gestures[index];
-const gestureImg = document.getElementById("gestureImg");
-gestureImg.src = "/img/" + currentGesture + ".png";
+
+function newGesture() {
+    let index = Math.random() * (steps.length - 1);
+    newGes = steps[index];
+    let currentGesture = gestures[index];
+    gestureImg.src = "img/" + newGes[0] + ".png";
+    allCount = newGes.length;
+    currentCount = 0;
+}
+
+newGesture();
 
 const video = document.getElementById("webcam");
 const canvasElement = document.getElementById("output_canvas");
@@ -75,6 +89,7 @@ if (hasGetUserMedia()) {
 
 // Enable the live webcam view and start detection.
 function enableCam(event) {
+    video1.style.display = "block";
     if (!gestureRecognizer) {
         alert("Please wait for gestureRecognizer to load");
         return;
@@ -82,13 +97,13 @@ function enableCam(event) {
     if (webcamRunning === true) {
         webcamRunning = false;
         enableWebcamButton.style.display = "none";
-        // gestureImg.style.display = "block";
+        gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
     } else {
         webcamRunning = true;
         // enableWebcamButton.innerText = "DISABLE PREDICTIONS";
         enableWebcamButton.style.display = "none";
-        // gestureImg.style.display = "block";
+        gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
     }
     // get Usermedia parameters.
@@ -106,6 +121,10 @@ let lastVideoTime = -1;
 let results = undefined;
 
 async function predictWebcam() {
+    if (enableWebcamButton.style.display === 'none') {
+        video1.style.display = "block";
+    }
+
     const webcamElement = document.getElementById("webcam");
     // Now let's start detecting the stream.
     if (runningMode === "IMAGE") {
@@ -163,33 +182,71 @@ async function predictWebcam() {
 
         const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
         // console.log(dist)
-
         // const point = [results.landmarks[0][0].x, results.landmarks[0][0].y, results.landmarks[0][0].z];
         // const point1 = [results.landmarks[1][0].x, results.landmarks[1][0].y, results.landmarks[1][0].z];
-        console.log(video1.src)
-        if (categoryName === categoryName1 && categoryScore1 > 75 && categoryScore > 75) {
+        // console.log(video1.src)
+        if (categoryName === categoryName1 && categoryScore1 > 80 && categoryScore > 80) {
             finalOutput.innerText = categoryName
-            if (video1.style.display === "none" && lastResults.filter((item) => item === categoryName).length === 60) {
-                video1.style.display = "block";
-                video1.src = "/video/wan.mp4";
+            // 第一次比出这个手势
+            if (lastResults.filter((item) => item === categoryName).length === 60 && currentCount < newGes.length) {
+
+                if (categoryName === '万字纹2-samples' || categoryName === '万字纹1-samples') {
+                    console.log(categoryName);
+                    video1.src = "/video/" + newGes[currentCount] + ".mp4";
+                    video1.style.display = "block";
+                    gestureImg.style.display = "block";
+                    // gestureImg.style.opacity = "1";
+                    // gestureImg.src = "img/" + newGes[currentCount] + ".png";
+                    gestureImg.style.opacity = "0"
+                    console.log("currentCount:", currentCount);
+                }
+                // currentCount++;
                 enableWebcamButton.style.display = "none";
-                // gestureImg.style.display = "none";
-                gestureImg.style.opacity = "1";
+                // gestureImg.style.display = "block";
+                // gestureImg.style.opacity = "0";
+                // video1.pause();
+                // video1.currentTime = 1
                 video1.addEventListener("ended", function () {
-                    video1.style.display = "none";
+                    // currentCount++;
+                    // video1.src = "/video/" + newGes[currentCount] + ".mp4";
+
+                    // currentCount++;
+                    if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== categoryName)) {
+                        recorded.push(categoryName)
+                        currentCount++;
+
+                        // gestureImg.style.opacity = "0"
+                    }
+                    if (currentCount < newGes.length) {
+                        video1.poster = "/video/" + newGes[currentCount] + ".png";
+                        gestureImg.style.display = "block";
+                        gestureImg.style.opacity = "1";
+                        gestureImg.src = "img/" + newGes[currentCount] + ".png";
+                    } else {
+                        gestureImg.style.display = "none";
+                        gestureImg.style.opacity = "0";
+                        // video1.style.display = "none";
+                        video1.src = ""
+                        // enableWebcamButton.style.display = "block";
+                        newGesture();
+                    }
+                    // video1.style.display = "none";
                     // gestureImg.style.display = "block";
-                    gestureImg.style.opacity = "1";
-                    video1.src = "";
+                    // gestureImg.style.opacity = "0";
+                    // gestureImg.src = "img/" + newGes[currentCount] + ".png";
+
+                    // console.log(gestureImg.src);
+                    // video1.src = "";
                     // enableWebcamButton.style.display = "block";
                     lastResult = "";
                     lastResults = [];
                 })
                 // lastResults = []
-            } else if (lastResults[lastResults.length - 1] === categoryName || lastResults.length === 0) {
+            } else if (lastResults[lastResults.length - 1] === categoryName || lastResults.length === 0) { // 检测维持在一个手势
                 lastResults.push(categoryName);
                 // gestureImg.style.display = "none";
-                gestureImg.style.opacity = "0";
-            } else if (lastResults[lastResults.length - 1] !== categoryName) {
+                // gestureImg.style.opacity = "0";
+            } else if (lastResults[lastResults.length - 1] !== categoryName) { // 检测手势在变化
                 lastResults = [];
                 // gestureImg.style.display = "block";
                 gestureImg.style.opacity = "1";
