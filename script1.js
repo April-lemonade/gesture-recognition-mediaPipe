@@ -24,7 +24,7 @@ const videoHeight = "360px";
 const videoWidth = "480px";
 let lastResult = "";
 let lastResults = [];
-let steps = [["wan0", "wan1"], ["turtle"]];
+let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"]];
 let currentCount = 0;
 const gestureImg = document.getElementById("gestureImg");
 let newGes;
@@ -118,6 +118,8 @@ function enableCam(event) {
 
 let lastVideoTime = -1;
 let results = undefined;
+let categoryName1;
+let categoryName;
 
 async function predictWebcam() {
     if (enableWebcamButton.style.display === 'none') {
@@ -165,11 +167,11 @@ async function predictWebcam() {
         gestureOutput1.style.width = videoWidth;
         gestureOutput2.style.display = "block";
         gestureOutput2.style.width = videoWidth;
-        const categoryName = results.gestures[0][0].categoryName;
+        categoryName = results.gestures[0][0].categoryName;
         const categoryScore = parseFloat(results.gestures[0][0].score * 100).toFixed(2);
         const handedness = results.handednesses[0][0].displayName;
 
-        const categoryName1 = results.gestures[1][0].categoryName;
+        categoryName1 = results.gestures[1][0].categoryName;
         const categoryScore1 = parseFloat(results.gestures[1][0].score * 100).toFixed(2);
 
         gestureOutput1.innerText = `GestureRecognizer1: ${categoryName}\n Confidence1: ${categoryScore} %\n Handedness1: ${handedness}`;
@@ -183,8 +185,12 @@ async function predictWebcam() {
         // const point = [results.landmarks[0][0].x, results.landmarks[0][0].y, results.landmarks[0][0].z];
         // const point1 = [results.landmarks[1][0].x, results.landmarks[1][0].y, results.landmarks[1][0].z];
         // console.log(video1.src)
-
+        if (categoryName === "turtle" && categoryName1 === "turtle") {
+            categoryName = "turtle0";
+            categoryName1 = "turtle0";
+        }
         if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 75 && categoryScore > 75) {
+
             finalOutput.innerText = categoryName
             // 第一次比出这个手势
             if (lastResults.filter((item) => item === categoryName).length === 60 && currentCount < newGes.length) {
@@ -279,7 +285,7 @@ async function predictWebcam() {
     }
 }
 
-function judgeEnd(categoryName) {
+function judgeEnd() {
     if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== categoryName)) {
         console.log("完成一步了");
         recorded.push(categoryName)
@@ -287,7 +293,7 @@ function judgeEnd(categoryName) {
         // gestureImg.style.opacity = "0"
     }
     console.log("currentCount2", currentCount);
-    if (currentCount < newGes.length && newGes.length > 1) {
+    if (currentCount < newGes.length - 1 && newGes.length > 1) {
         if (currentCount !== 0) {
             video1.poster = "/video/" + newGes[currentCount] + ".png";
         }
@@ -295,18 +301,31 @@ function judgeEnd(categoryName) {
         gestureImg.style.opacity = "1";
         gestureImg.src = "/img/" + newGes[currentCount] + ".png";
     } else {
-        console.log("这个手势结束了，即将换新手势……");
-        gestureImg.style.display = "block";
-        gestureImg.style.opacity = "1";
-        // video1.style.display = "none";
-        video1.src = "";
-        video1.poster = "";
-        video1.style.display = "none";
-        // recorded = []
-        // enableWebcamButton.style.display = "block";
-        newGesture();
-        // video1.removeEventListener("ended",newGesture);
-        // currentCount = 0
+        if (currentCount === newGes.length - 1) {
+            video1.poster = "";
+            video1.src = "/video/" + newGes[currentCount] + ".mp4";
+            video1.style.width = "100vw";
+            video1.style.height = "100vh";
+            video1.addEventListener("ended", endGes, {once: true})
+        }
+
     }
 
+}
+
+function endGes() {
+    console.log("这个手势结束了，即将换新手势……");
+    gestureImg.style.display = "block";
+    gestureImg.style.opacity = "1";
+    video1.style.width = "300px";
+    video1.style.height = "300px";
+    // video1.style.display = "none";
+    video1.src = "";
+    video1.poster = "";
+    video1.style.display = "none";
+    // recorded = []
+    // enableWebcamButton.style.display = "block";
+    newGesture();
+    // video1.removeEventListener("ended",newGesture);
+    // currentCount = 0
 }

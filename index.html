@@ -10,13 +10,13 @@
 
 <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
 <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-<div style="width: 100%;display: flex;align-items: center;text-align: center;justify-content: center;margin-top: 30vh">
+<div style="width: 100%;display: flex;align-items: center;text-align: center;justify-content: center;">
     <button id="webcamButton" class="mdc-button mdc-button--raised" style="font-size: xxx-large">
         <span class="mdc-button__ripple"></span>
         <span class="mdc-button__label" style="font-size: xxx-large">START</span>
     </button>
-    <div style="display: flex;flex-direction: column">
-        <video autoplay muted id="video" src="" style="display: none;width: 300px;"></video>
+    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center">
+        <video autoplay muted id="video" src="" style="display: none;width: 100vw;"></video>
         <img id="gestureImg" style="opacity: 0;width: 300px;display: none" src="" alt=""/>
     </div>
 </div>
