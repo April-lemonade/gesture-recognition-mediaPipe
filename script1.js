@@ -24,9 +24,7 @@ const videoHeight = "360px";
 const videoWidth = "480px";
 let lastResult = "";
 let lastResults = [];
-let gestures = ["wan1"];
-let steps = [["wan0", "wan1"]];
-let allCount = 0;
+let steps = [["wan0", "wan1"], ["turtle"]];
 let currentCount = 0;
 const gestureImg = document.getElementById("gestureImg");
 let newGes;
@@ -39,7 +37,7 @@ const createGestureRecognizer = async () => {
     const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");
     gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
         baseOptions: {
-            modelAssetPath: './gesture_recognizer-3.task',
+            modelAssetPath: './gesture_recognizer-2.task',
             delegate: "GPU",
             num_hands: num_hand
         },
@@ -55,12 +53,13 @@ const createGestureRecognizer = async () => {
 createGestureRecognizer();
 
 function newGesture() {
-    let index = Math.random() * (steps.length - 1);
-    newGes = steps[index];
-    let currentGesture = gestures[index];
-    gestureImg.src = "img/" + newGes[0] + ".png";
-    allCount = newGes.length;
+    lastResult = "";
+    lastResults = [];
+    recorded = []
     currentCount = 0;
+    let index = Math.floor(Math.random() * steps.length);
+    newGes = steps[index];
+    gestureImg.src = "img/" + newGes[0] + ".png";
 }
 
 newGesture();
@@ -176,71 +175,83 @@ async function predictWebcam() {
         gestureOutput1.innerText = `GestureRecognizer1: ${categoryName}\n Confidence1: ${categoryScore} %\n Handedness1: ${handedness}`;
         gestureOutput2.innerText = `GestureRecognizer2: ${categoryName1}\n Confidence2: ${categoryScore1} %\n Handedness2: ${results.handednesses[1][0].displayName}`;
 
-        const dx = results.landmarks[0][0].x - results.landmarks[1][0].x;
-        const dy = results.landmarks[0][0].y - results.landmarks[1][0].y;
-        const dz = results.landmarks[0][0].z - results.landmarks[1][0].z;
-
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        // const dx = results.landmarks[0][0].x - results.landmarks[1][0].x;
+        // const dy = results.landmarks[0][0].y - results.landmarks[1][0].y;
+        // const dz = results.landmarks[0][0].z - results.landmarks[1][0].z;
+        // const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
         // console.log(dist)
         // const point = [results.landmarks[0][0].x, results.landmarks[0][0].y, results.landmarks[0][0].z];
         // const point1 = [results.landmarks[1][0].x, results.landmarks[1][0].y, results.landmarks[1][0].z];
         // console.log(video1.src)
-        if (categoryName === categoryName1 && categoryScore1 > 80 && categoryScore > 80) {
+
+        if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 75 && categoryScore > 75) {
             finalOutput.innerText = categoryName
             // 第一次比出这个手势
             if (lastResults.filter((item) => item === categoryName).length === 60 && currentCount < newGes.length) {
-
-                if (categoryName === '万字纹2-samples' || categoryName === '万字纹1-samples') {
-                    console.log(categoryName);
-                    video1.src = "/video/" + newGes[currentCount] + ".mp4";
-                    video1.style.display = "block";
-                    gestureImg.style.display = "block";
-                    // gestureImg.style.opacity = "1";
-                    // gestureImg.src = "img/" + newGes[currentCount] + ".png";
-                    gestureImg.style.opacity = "0"
-                    console.log("currentCount:", currentCount);
-                }
+                // if (categoryName === '万字纹2-samples' || categoryName === '万字纹1-samples') {
+                // console.log(categoryName);
+                video1.src = "/video/" + newGes[currentCount] + ".mp4";
+                video1.style.display = "block";
+                gestureImg.style.display = "block";
+                // gestureImg.style.opacity = "1";
+                // gestureImg.src = "img/" + newGes[currentCount] + ".png";
+                gestureImg.style.opacity = "0"
+                console.log("currentCount1:", currentCount);
+                // }
                 // currentCount++;
                 enableWebcamButton.style.display = "none";
                 // gestureImg.style.display = "block";
                 // gestureImg.style.opacity = "0";
                 // video1.pause();
                 // video1.currentTime = 1
-                video1.addEventListener("ended", function () {
-                    // currentCount++;
-                    // video1.src = "/video/" + newGes[currentCount] + ".mp4";
+                /*
+                                video1.addEventListener("ended", function () {
+                                    // currentCount++;
+                                    // video1.src = "/video/" + newGes[currentCount] + ".mp4";
+                                    console.log("currentCount2", currentCount);
+                                    if (!(currentCount < newGes.length)) {
+                                        recorded = []
+                                    }
+                                    // currentCount++;
+                                    if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== categoryName)) {
+                                        recorded.push(categoryName)
+                                        currentCount++;
+                                        // gestureImg.style.opacity = "0"
+                                    }
+                                    if (currentCount < newGes.length && newGes.length > 1) {
+                                        if (currentCount !== 0) {
+                                            video1.poster = "/video/" + newGes[currentCount] + ".png";
+                                        }
+                                        gestureImg.style.display = "block";
+                                        gestureImg.style.opacity = "1";
+                                        gestureImg.src = "img/" + newGes[currentCount] + ".png";
+                                    } else {
+                                        console.log("这个手势结束了，即将换新手势……");
+                                        gestureImg.style.display = "none";
+                                        gestureImg.style.opacity = "0";
+                                        // video1.style.display = "none";
+                                        video1.src = "";
+                                        video1.poster = "";
+                                        video1.style.display = "none";
+                                        // recorded = []
+                                        // enableWebcamButton.style.display = "block";
+                                        newGesture();
+                                        // video1.removeEventListener("ended",newGesture);
+                                        // currentCount = 0
+                                    }
+                                    // video1.style.display = "none";
+                                    // gestureImg.style.display = "block";
+                                    // gestureImg.style.opacity = "0";
+                                    // gestureImg.src = "img/" + newGes[currentCount] + ".png";
 
-                    // currentCount++;
-                    if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== categoryName)) {
-                        recorded.push(categoryName)
-                        currentCount++;
-
-                        // gestureImg.style.opacity = "0"
-                    }
-                    if (currentCount < newGes.length) {
-                        video1.poster = "/video/" + newGes[currentCount] + ".png";
-                        gestureImg.style.display = "block";
-                        gestureImg.style.opacity = "1";
-                        gestureImg.src = "img/" + newGes[currentCount] + ".png";
-                    } else {
-                        gestureImg.style.display = "none";
-                        gestureImg.style.opacity = "0";
-                        // video1.style.display = "none";
-                        video1.src = ""
-                        // enableWebcamButton.style.display = "block";
-                        newGesture();
-                    }
-                    // video1.style.display = "none";
-                    // gestureImg.style.display = "block";
-                    // gestureImg.style.opacity = "0";
-                    // gestureImg.src = "img/" + newGes[currentCount] + ".png";
-
-                    // console.log(gestureImg.src);
-                    // video1.src = "";
-                    // enableWebcamButton.style.display = "block";
-                    lastResult = "";
-                    lastResults = [];
-                })
+                                    // console.log(gestureImg.src);
+                                    // video1.src = "";
+                                    // enableWebcamButton.style.display = "block";
+                                    // lastResult = "";
+                                    // lastResults = [];
+                                }, {once: true})
+                */
+                video1.addEventListener("ended", judgeEnd, {once: true})
                 // lastResults = []
             } else if (lastResults[lastResults.length - 1] === categoryName || lastResults.length === 0) { // 检测维持在一个手势
                 lastResults.push(categoryName);
@@ -266,4 +277,36 @@ async function predictWebcam() {
     if (webcamRunning === true) {
         window.requestAnimationFrame(predictWebcam);
     }
+}
+
+function judgeEnd(categoryName) {
+    if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== categoryName)) {
+        console.log("完成一步了");
+        recorded.push(categoryName)
+        currentCount++;
+        // gestureImg.style.opacity = "0"
+    }
+    console.log("currentCount2", currentCount);
+    if (currentCount < newGes.length && newGes.length > 1) {
+        if (currentCount !== 0) {
+            video1.poster = "/video/" + newGes[currentCount] + ".png";
+        }
+        gestureImg.style.display = "block";
+        gestureImg.style.opacity = "1";
+        gestureImg.src = "/img/" + newGes[currentCount] + ".png";
+    } else {
+        console.log("这个手势结束了，即将换新手势……");
+        gestureImg.style.display = "block";
+        gestureImg.style.opacity = "1";
+        // video1.style.display = "none";
+        video1.src = "";
+        video1.poster = "";
+        video1.style.display = "none";
+        // recorded = []
+        // enableWebcamButton.style.display = "block";
+        newGesture();
+        // video1.removeEventListener("ended",newGesture);
+        // currentCount = 0
+    }
+
 }
