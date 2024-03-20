@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title> MediaPipe HandGestureRecognizer Task for web</title>
     <link rel="stylesheet" href="style.css">
+<!--    <script src="../../Library/Application Support/JetBrains/IntelliJIdea2023.3/javascript/extLibs/http_unpkg.com_material-components-web@latest_dist_material-components-web.js"></script>-->
+<!--    <link rel="stylesheet"-->
+<!--          href="../../Library/Application Support/JetBrains/IntelliJIdea2023.3/javascript/extLibs/http_unpkg.com_material-components-web@latest_dist_material-components-web.css">-->
 
 </head>
 <body>
@@ -11,9 +14,8 @@
 <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
 <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
 <div style="width: 100%;display: flex;align-items: center;text-align: center;justify-content: center;">
-    <button id="webcamButton" class="mdc-button mdc-button--raised" style="font-size: xxx-large">
-        <span class="mdc-button__ripple"></span>
-        <span class="mdc-button__label" style="font-size: xxx-large">START</span>
+    <button id="webcamButton" style="font-size: xxx-large;color: white;border: none">
+        START
     </button>
     <div style="display: flex;flex-direction: column;justify-content: center;align-items: center">
         <video autoplay muted id="video" src="" style="display: none;width: 70vw;height: 70vh"></video>

@@ -289,23 +289,28 @@ async function predictWebcam() {
 function judgeEnd() {
     lastResults = [];
     if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== newGes[currentCount])) {
-        console.log("完成一步了",recorded);
+        console.log("完成一步了", recorded);
         recorded.push(categoryName)
         currentCount++;
         // gestureImg.style.opacity = "0"
     }
     console.log("currentCount2", currentCount);
-    if (currentCount < newGes.length - 1 && newGes.length > 1) {
-        if (currentCount !== 0) {
-            video1.poster = "/video/" + newGes[currentCount] + ".png";
-        }
+    if (currentCount !== 0) {
+        console.log("换封面");
+        video1.poster = "/video/" + newGes[currentCount] + ".png";
+    }
+    if (currentCount < newGes.length -1  && newGes.length > 1) {
+        // if (currentCount !== 0) {
+        //     console.log("换封面");
+        //     video1.poster = "/video/" + newGes[currentCount] + ".png";
+        // }
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
         gestureImg.src = "/img/" + newGes[currentCount] + ".png";
         console.log(results)
     } else {
         if (currentCount === newGes.length - 1) {
-            video1.poster = "";
+            // video1.poster = "";
             video1.src = "/video/" + newGes[currentCount] + ".mp4";
             video1.style.width = "70vw";
             video1.style.height = "70vh";

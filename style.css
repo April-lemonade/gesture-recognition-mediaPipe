@@ -14,104 +14,110 @@ limitations under the License. */
 
 @use "@material";
 body {
-  /*font-family: roboto;*/
-  margin: 2em;
-  color: black;
-  --mdc-theme-primary: black;
-  --mdc-theme-on-primary: white;
+    /*font-family: roboto;*/
+    margin: 2em;
+    color: black;
+    --mdc-theme-primary: black;
+    --mdc-theme-on-primary: white;
 }
 
 h1 {
-  color: #007f8b;
+    color: #007f8b;
 }
 
 h2 {
-  clear: both;
+    clear: both;
 }
 
 video {
-  clear: both;
-  display: block;
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  height: 280px;
+    clear: both;
+    display: block;
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    height: 280px;
 }
 
 section {
-  opacity: 1;
-  transition: opacity 500ms ease-in-out;
+    opacity: 1;
+    transition: opacity 500ms ease-in-out;
 }
 
-#gestureImg{
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
+#gestureImg {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+#webcamButton:hover {
+    cursor: pointer;
 }
 
 .removed {
-  display: none;
+    display: none;
 }
 
 .invisible {
-  opacity: 0.2;
+    opacity: 0.2;
 }
 
 .detectOnClick {
-  position: relative;
-  float: left;
-  width: 48%;
-  margin: 2% 1%;
-  cursor: pointer;
+    position: relative;
+    float: left;
+    width: 48%;
+    margin: 2% 1%;
+    cursor: pointer;
 }
+
 .videoView {
-  position: absolute;
-  float: left;
-  width: 48%;
-  margin: 2% 1%;
-  cursor: pointer;
-  min-height: 500px;
+    position: absolute;
+    float: left;
+    width: 48%;
+    margin: 2% 1%;
+    cursor: pointer;
+    min-height: 500px;
 }
 
 .videoView p,
 .detectOnClick p {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  background-color: #007f8b;
-  color: #fff;
-  border: 1px dashed rgba(255, 255, 255, 0.7);
-  z-index: 2;
-  margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #007f8b;
+    color: #fff;
+    border: 1px dashed rgba(255, 255, 255, 0.7);
+    z-index: 2;
+    margin: 0;
 }
 
 .highlighter {
-  background: rgba(0, 255, 0, 0.25);
-  border: 1px dashed #fff;
-  z-index: 1;
-  position: absolute;
+    background: rgba(0, 255, 0, 0.25);
+    border: 1px dashed #fff;
+    z-index: 1;
+    position: absolute;
 }
 
 .canvas {
-  z-index: 1;
-  position: absolute;
-  pointer-events: none;
+    z-index: 1;
+    position: absolute;
+    pointer-events: none;
 }
 
 .output_canvas {
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
 }
 
 .detectOnClick {
-  z-index: 0;
-  font-size: calc(8px + 1.2vw);
+    z-index: 0;
+    font-size: calc(8px + 1.2vw);
 }
 
 .detectOnClick img {
-  width: 45vw;
+    width: 45vw;
 }
+
 .output {
-  display: none;
-  width: 100%;
-  font-size: calc(8px + 1.2vw);
+    display: none;
+    width: 100%;
+    font-size: calc(8px + 1.2vw);
 }
