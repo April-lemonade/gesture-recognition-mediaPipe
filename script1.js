@@ -20,8 +20,8 @@ let runningMode = "IMAGE";
 let num_hand = 2;
 let enableWebcamButton;
 let webcamRunning = false;
-const videoHeight = "360px";
-const videoWidth = "480px";
+const videoHeight = "1080px";
+const videoWidth = "1920px";
 let lastResult = "";
 let lastResults = [];
 let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"]];
@@ -89,6 +89,8 @@ if (hasGetUserMedia()) {
 // Enable the live webcam view and start detection.
 function enableCam(event) {
     video1.style.display = "block";
+    document.getElementById("output_canvas").style.zIndex="99"
+    document.getElementById("output_canvas").style.display="block"
     if (!gestureRecognizer) {
         alert("Please wait for gestureRecognizer to load");
         return;
@@ -104,6 +106,7 @@ function enableCam(event) {
         enableWebcamButton.style.display = "none";
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
+        // document.getElementById("canvas").style.zIndex="100"
     }
     // get Usermedia parameters.
     const constraints = {
@@ -119,7 +122,7 @@ function enableCam(event) {
 let lastVideoTime = -1;
 let results = undefined;
 let categoryName1;
-let categoryName;
+// let categoryName;
 
 async function predictWebcam() {
     if (enableWebcamButton.style.display === 'none') {
@@ -151,11 +154,11 @@ async function predictWebcam() {
     if (results.landmarks) {
         for (const landmarks of results.landmarks) {
             drawingUtils.drawConnectors(landmarks, GestureRecognizer.HAND_CONNECTIONS, {
-                color: "#00FF00",
+                color: "#FFFFFF",
                 lineWidth: 5
             });
             drawingUtils.drawLandmarks(landmarks, {
-                color: "#FF0000",
+                color: "#FFFFFF",
                 lineWidth: 2
             });
         }
@@ -167,7 +170,7 @@ async function predictWebcam() {
         gestureOutput1.style.width = videoWidth;
         gestureOutput2.style.display = "block";
         gestureOutput2.style.width = videoWidth;
-        categoryName = results.gestures[0][0].categoryName;
+        let categoryName = results.gestures[0][0].categoryName;
         const categoryScore = parseFloat(results.gestures[0][0].score * 100).toFixed(2);
         const handedness = results.handednesses[0][0].displayName;
 
@@ -189,11 +192,11 @@ async function predictWebcam() {
             categoryName = "turtle0";
             categoryName1 = "turtle0";
         }
-        if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 75 && categoryScore > 75) {
+        if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 80 && categoryScore > 80) {
 
             finalOutput.innerText = categoryName
             // 第一次比出这个手势
-            if (lastResults.filter((item) => item === categoryName).length === 80 && currentCount < newGes.length) {
+            if (lastResults.filter((item) => item === categoryName).length === 100 && currentCount < newGes.length) {
                 // if (categoryName === '万字纹2-samples' || categoryName === '万字纹1-samples') {
                 // console.log(categoryName);
                 lastResults = [];
@@ -258,7 +261,7 @@ async function predictWebcam() {
                                     // lastResults = [];
                                 }, {once: true})
                 */
-                video1.addEventListener("ended", judgeEnd, {once: true})
+                video1.addEventListener("ended", event=>{judgeEnd(categoryName)}, {once: true})
                 // lastResults = []
             } else if (lastResults[lastResults.length - 1] === categoryName || lastResults.length === 0) { // 检测维持在一个手势
                 lastResults.push(categoryName);
@@ -286,15 +289,16 @@ async function predictWebcam() {
     }
 }
 
-function judgeEnd() {
+function judgeEnd(categoryName) {
     lastResults = [];
     if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== newGes[currentCount])) {
         console.log("完成一步了", recorded);
-        recorded.push(categoryName)
+        recorded.push(categoryName);
         currentCount++;
+        console.log("currentCount++:", currentCount,";recorded:",recorded);
         // gestureImg.style.opacity = "0"
     }
-    console.log("currentCount2", currentCount);
+    // console.log("currentCount2", currentCount);
     if (currentCount !== 0) {
         console.log("换封面");
         video1.poster = "/video/" + newGes[currentCount] + ".png";
@@ -307,7 +311,8 @@ function judgeEnd() {
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
         gestureImg.src = "/img/" + newGes[currentCount] + ".png";
-        console.log(results)
+        // console.log(results)
+        console.log("currentCount:", currentCount,";recorded:",recorded);
     } else {
         if (currentCount === newGes.length - 1) {
             // video1.poster = "";
@@ -316,7 +321,7 @@ function judgeEnd() {
             video1.style.height = "70vh";
             video1.addEventListener("ended", endGes, {once: true})
         }
-        console.log(results)
+        // console.log(results)
     }
 
 }

@@ -4,19 +4,23 @@
     <meta charset="UTF-8">
     <title> MediaPipe HandGestureRecognizer Task for web</title>
     <link rel="stylesheet" href="style.css">
-<!--    <script src="../../Library/Application Support/JetBrains/IntelliJIdea2023.3/javascript/extLibs/http_unpkg.com_material-components-web@latest_dist_material-components-web.js"></script>-->
-<!--    <link rel="stylesheet"-->
-<!--          href="../../Library/Application Support/JetBrains/IntelliJIdea2023.3/javascript/extLibs/http_unpkg.com_material-components-web@latest_dist_material-components-web.css">-->
+    <!--    <script src="../../Library/Application Support/JetBrains/IntelliJIdea2023.3/javascript/extLibs/http_unpkg.com_material-components-web@latest_dist_material-components-web.js"></script>-->
+    <!--    <link rel="stylesheet"-->
+    <!--          href="../../Library/Application Support/JetBrains/IntelliJIdea2023.3/javascript/extLibs/http_unpkg.com_material-components-web@latest_dist_material-components-web.css">-->
 
 </head>
 <body>
 
 <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
 <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-<div style="width: 100%;display: flex;align-items: center;text-align: center;justify-content: center;">
-    <button id="webcamButton" style="font-size: xxx-large;color: white;border: none">
-        START
+<!--<img id="gif" src="video/1920万1到2.gif" alt=""/>-->
+<canvas class="output_canvas" id="output_canvas" width="1920px" height="1080px"
+        style="z-index: -2;position: absolute;pointer-events: none;width: 100%;display: none"></canvas>
+<div style="width: 100%;display: flex;align-items: center;text-align: center;justify-content: center;flex-direction: column">
+    <button id="webcamButton"
+            style="font-size: xxx-large;color: white;border: none;background-color: black;margin-top: 40%">START
     </button>
+
     <div style="display: flex;flex-direction: column;justify-content: center;align-items: center">
         <video autoplay muted id="video" src="" style="display: none;width: 70vw;height: 70vh"></video>
         <img id="gestureImg" style="opacity: 0;width: 300px;display: none" src="" alt=""/>
@@ -24,7 +28,7 @@
 </div>
 
 
-<section id="demos" class="invisible">
+<section id="demos" class="invisible" style="display: none">
     <div id="liveView" class="videoView">
         <!--        <button id="webcamButton" class="mdc-button mdc-button&#45;&#45;raised">-->
         <!--            <span class="mdc-button__ripple"></span>-->
@@ -34,8 +38,8 @@
         </h1>
         <div style="position: relative;flex-direction: row">
             <video style="display: none" id="webcam" autoplay playsinline></video>
-            <canvas class="output_canvas" id="output_canvas" width="1280" height="720"
-                    style="position: absolute; left: 0; top: 0;"></canvas>
+            <!--            <canvas class="output_canvas" id="output_canvas" width="1280" height="720"-->
+            <!--                    style="position: absolute; left: 0; top: 0;"></canvas>-->
             <div style="display: none;flex-direction: column;left: 200px">
                 <p id='gesture_output1' class="output">
                 <p id='gesture_output2' class="output">
@@ -46,8 +50,8 @@
 <!-- partial -->
 <script type="module" src="script1.js"></script>
 <style>
-    * {
-        margin-top: 0;
+    body {
+        margin: 0;
         padding: 0;
         background-color: black;
     }
