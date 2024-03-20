@@ -16,13 +16,13 @@
         <span class="mdc-button__label" style="font-size: xxx-large">START</span>
     </button>
     <div style="display: flex;flex-direction: column;justify-content: center;align-items: center">
-        <video autoplay muted id="video" src="" style="display: none;width: 100vw;"></video>
+        <video autoplay muted id="video" src="" style="display: none;width: 70vw;height: 70vh"></video>
         <img id="gestureImg" style="opacity: 0;width: 300px;display: none" src="" alt=""/>
     </div>
 </div>
 
 
-<section style="display: none" id="demos" class="invisible">
+<section id="demos" class="invisible">
     <div id="liveView" class="videoView">
         <!--        <button id="webcamButton" class="mdc-button mdc-button&#45;&#45;raised">-->
         <!--            <span class="mdc-button__ripple"></span>-->
@@ -30,11 +30,11 @@
         <!--        </button>-->
         <h1 style="display: none">final predict:<p id="final_output">none</p>
         </h1>
-        <div style="position: relative;display: none;flex-direction: row">
+        <div style="position: relative;flex-direction: row">
             <video style="display: none" id="webcam" autoplay playsinline></video>
             <canvas class="output_canvas" id="output_canvas" width="1280" height="720"
-                    style="position: absolute; left: 0; top: 0;display: none"></canvas>
-            <div style="display: flex;flex-direction: column;left: 200px">
+                    style="position: absolute; left: 0; top: 0;"></canvas>
+            <div style="display: none;flex-direction: column;left: 200px">
                 <p id='gesture_output1' class="output">
                 <p id='gesture_output2' class="output">
             </div>

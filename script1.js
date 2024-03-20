@@ -193,9 +193,10 @@ async function predictWebcam() {
 
             finalOutput.innerText = categoryName
             // 第一次比出这个手势
-            if (lastResults.filter((item) => item === categoryName).length === 60 && currentCount < newGes.length) {
+            if (lastResults.filter((item) => item === categoryName).length === 80 && currentCount < newGes.length) {
                 // if (categoryName === '万字纹2-samples' || categoryName === '万字纹1-samples') {
                 // console.log(categoryName);
+                lastResults = [];
                 video1.src = "/video/" + newGes[currentCount] + ".mp4";
                 video1.style.display = "block";
                 gestureImg.style.display = "block";
@@ -286,8 +287,9 @@ async function predictWebcam() {
 }
 
 function judgeEnd() {
-    if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== categoryName)) {
-        console.log("完成一步了");
+    lastResults = [];
+    if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== newGes[currentCount])) {
+        console.log("完成一步了",recorded);
         recorded.push(categoryName)
         currentCount++;
         // gestureImg.style.opacity = "0"
@@ -300,25 +302,28 @@ function judgeEnd() {
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
         gestureImg.src = "/img/" + newGes[currentCount] + ".png";
+        console.log(results)
     } else {
         if (currentCount === newGes.length - 1) {
             video1.poster = "";
             video1.src = "/video/" + newGes[currentCount] + ".mp4";
-            video1.style.width = "100vw";
-            video1.style.height = "100vh";
+            video1.style.width = "70vw";
+            video1.style.height = "70vh";
             video1.addEventListener("ended", endGes, {once: true})
         }
-
+        console.log(results)
     }
 
 }
 
 function endGes() {
+    lastResults = [];
+    currentCount = 0;
     console.log("这个手势结束了，即将换新手势……");
     gestureImg.style.display = "block";
     gestureImg.style.opacity = "1";
-    video1.style.width = "300px";
-    video1.style.height = "300px";
+    video1.style.width = "70vw";
+    video1.style.height = "70vh";
     // video1.style.display = "none";
     video1.src = "";
     video1.poster = "";
