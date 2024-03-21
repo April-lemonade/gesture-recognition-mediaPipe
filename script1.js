@@ -28,7 +28,8 @@ let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"]];
 let currentCount = 0;
 const gestureImg = document.getElementById("gestureImg");
 let newGes;
-let recorded = []
+let recorded = [];
+// let index = 0;
 
 // Before we can use HandLandmarker class we must wait for it to finish
 // loading. Machine Learning models can be large and take a moment to
@@ -52,14 +53,22 @@ const createGestureRecognizer = async () => {
 };
 createGestureRecognizer();
 
+let index = -1
+
 function newGesture() {
     lastResult = "";
     lastResults = [];
     recorded = []
     currentCount = 0;
-    let index = Math.floor(Math.random() * steps.length);
+    // let index = Math.floor(Math.random() * steps.length);
+    if (index < steps.length - 1) {
+        index = index + 1;
+    } else {
+        index = 0;
+    }
+    console.log("index", index);
     newGes = steps[index];
-    gestureImg.src = "img/" + newGes[0] + ".png";
+    gestureImg.src = "/img/" + newGes[0] + ".png";
 }
 
 newGesture();
@@ -89,8 +98,8 @@ if (hasGetUserMedia()) {
 // Enable the live webcam view and start detection.
 function enableCam(event) {
     video1.style.display = "block";
-    document.getElementById("output_canvas").style.zIndex="99"
-    document.getElementById("output_canvas").style.display="block"
+    document.getElementById("output_canvas").style.zIndex = "99"
+    document.getElementById("output_canvas").style.display = "block"
     if (!gestureRecognizer) {
         alert("Please wait for gestureRecognizer to load");
         return;
@@ -122,6 +131,7 @@ function enableCam(event) {
 let lastVideoTime = -1;
 let results = undefined;
 let categoryName1;
+
 // let categoryName;
 
 async function predictWebcam() {
@@ -192,8 +202,7 @@ async function predictWebcam() {
             categoryName = "turtle0";
             categoryName1 = "turtle0";
         }
-        if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 80 && categoryScore > 80) {
-
+        if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 65 && categoryScore > 65) {
             finalOutput.innerText = categoryName
             // 第一次比出这个手势
             if (lastResults.filter((item) => item === categoryName).length === 100 && currentCount < newGes.length) {
@@ -261,7 +270,9 @@ async function predictWebcam() {
                                     // lastResults = [];
                                 }, {once: true})
                 */
-                video1.addEventListener("ended", event=>{judgeEnd(categoryName)}, {once: true})
+                video1.addEventListener("ended", event => {
+                    judgeEnd(categoryName)
+                }, {once: true})
                 // lastResults = []
             } else if (lastResults[lastResults.length - 1] === categoryName || lastResults.length === 0) { // 检测维持在一个手势
                 lastResults.push(categoryName);
@@ -291,11 +302,11 @@ async function predictWebcam() {
 
 function judgeEnd(categoryName) {
     lastResults = [];
-    if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== newGes[currentCount])) {
+    if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== categoryName)) {
         console.log("完成一步了", recorded);
         recorded.push(categoryName);
         currentCount++;
-        console.log("currentCount++:", currentCount,";recorded:",recorded);
+        console.log("currentCount++:", currentCount, ";recorded:", recorded);
         // gestureImg.style.opacity = "0"
     }
     // console.log("currentCount2", currentCount);
@@ -303,7 +314,7 @@ function judgeEnd(categoryName) {
         console.log("换封面");
         video1.poster = "/video/" + newGes[currentCount] + ".png";
     }
-    if (currentCount < newGes.length -1  && newGes.length > 1) {
+    if (currentCount < newGes.length - 1 && newGes.length > 1) {
         // if (currentCount !== 0) {
         //     console.log("换封面");
         //     video1.poster = "/video/" + newGes[currentCount] + ".png";
@@ -312,7 +323,7 @@ function judgeEnd(categoryName) {
         gestureImg.style.opacity = "1";
         gestureImg.src = "/img/" + newGes[currentCount] + ".png";
         // console.log(results)
-        console.log("currentCount:", currentCount,";recorded:",recorded);
+        console.log("currentCount:", currentCount, ";recorded:", recorded);
     } else {
         if (currentCount === newGes.length - 1) {
             // video1.poster = "";
