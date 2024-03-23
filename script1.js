@@ -20,8 +20,8 @@ let runningMode = "IMAGE";
 let num_hand = 2;
 let enableWebcamButton;
 let webcamRunning = false;
-const videoHeight = "1080px";
-const videoWidth = "1920px";
+const videoHeight = "360px";
+const videoWidth = "720px";
 let lastResult = "";
 let lastResults = [];
 let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"]];
@@ -29,6 +29,10 @@ let currentCount = 0;
 const gestureImg = document.getElementById("gestureImg");
 let newGes;
 let recorded = [];
+const ingSounds = [["ing_syn_0.wav", "ing_ope_0.wav"], ["ing_syn_1.wav", "ing_ope_1.wav"], ["ing_syn_2.wav", "ing_ope_2.wav"]];
+const edSounds = [["ed_syn_0.wav", "ed_ope_0.wav"], ["ed_syn_1.wav", "ed_ope_1.wav"]];
+let soundIndex;
+let edSoundIndex;
 // let index = 0;
 
 // Before we can use HandLandmarker class we must wait for it to finish
@@ -56,6 +60,8 @@ createGestureRecognizer();
 let index = -1
 
 function newGesture() {
+    soundIndex = Math.round(Math.random());
+    edSoundIndex = Math.round(Math.random());
     lastResult = "";
     lastResults = [];
     recorded = []
@@ -80,6 +86,7 @@ const gestureOutput1 = document.getElementById("gesture_output1");
 const gestureOutput2 = document.getElementById("gesture_output2");
 const finalOutput = document.getElementById("final_output");
 const video1 = document.getElementById("video");
+const sound = document.getElementById("sound");
 
 // Check if webcam access is supported.
 function hasGetUserMedia() {
@@ -161,6 +168,10 @@ async function predictWebcam() {
     webcamElement.style.height = videoHeight;
     canvasElement.style.width = videoWidth;
     webcamElement.style.width = videoWidth;
+    canvasElement.style.marginTop = "60vh";
+    webcamElement.style.marginTop = "60vh";
+    canvasElement.style.marginLeft = "50vh";
+    webcamElement.style.marginLeft = "50vh";
     if (results.landmarks) {
         for (const landmarks of results.landmarks) {
             drawingUtils.drawConnectors(landmarks, GestureRecognizer.HAND_CONNECTIONS, {
@@ -212,6 +223,14 @@ async function predictWebcam() {
                 video1.src = "/video/" + newGes[currentCount] + ".mp4";
                 video1.style.display = "block";
                 gestureImg.style.display = "block";
+                // if (currentCount === newGes.length) {
+                //     console.log("===")
+                //     sound.src = "/sound/" + edSounds[edSoundIndex][soundIndex];
+                // } else {
+                //     sound.src = "/sound/" + ingSounds[currentCount][soundIndex];
+                // }
+                sound.src = "/sound/" + ingSounds[currentCount][soundIndex];
+                console.log("更新声音");
                 // gestureImg.style.opacity = "1";
                 // gestureImg.src = "img/" + newGes[currentCount] + ".png";
                 gestureImg.style.opacity = "0"
@@ -330,6 +349,13 @@ function judgeEnd(categoryName) {
             video1.src = "/video/" + newGes[currentCount] + ".mp4";
             video1.style.width = "70vw";
             video1.style.height = "70vh";
+            video1.addEventListener("canplaythrough", () => {
+                sound.src = "/sound/" + edSounds[edSoundIndex][soundIndex];
+                console.log("更新最终展示音效");
+            }, {once: true});
+            sound.addEventListener("ended", () => {
+                sound.src = "";
+            })
             video1.addEventListener("ended", endGes, {once: true})
         }
         // console.log(results)
@@ -349,6 +375,7 @@ function endGes() {
     video1.src = "";
     video1.poster = "";
     video1.style.display = "none";
+
     // recorded = []
     // enableWebcamButton.style.display = "block";
     newGesture();
