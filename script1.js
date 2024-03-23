@@ -216,9 +216,10 @@ async function predictWebcam() {
         if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 65 && categoryScore > 65) {
             finalOutput.innerText = categoryName
             // 第一次比出这个手势
-            if (lastResults.filter((item) => item === categoryName).length === 100 && currentCount < newGes.length) {
+            if (lastResults.filter((item) => item === categoryName).length === 100 && currentCount < newGes.length && categoryName !== lastResult) {
                 // if (categoryName === '万字纹2-samples' || categoryName === '万字纹1-samples') {
                 // console.log(categoryName);
+                lastResult = categoryName
                 lastResults = [];
                 video1.src = "/video/" + newGes[currentCount] + ".mp4";
                 video1.style.display = "block";
@@ -302,7 +303,7 @@ async function predictWebcam() {
                 // gestureImg.style.display = "block";
                 gestureImg.style.opacity = "1";
             }
-            // lastResult = categoryName
+
             // lastResults.append(categoryName)
             // if (lastResults.length > 10) lastResults.slice(0, 9);
             // console.log(video1.src)
