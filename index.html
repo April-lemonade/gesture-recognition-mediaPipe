@@ -4,47 +4,29 @@
     <meta charset="UTF-8">
     <title> MediaPipe HandGestureRecognizer Task for web</title>
     <link rel="stylesheet" href="style.css">
-    <script src="../../Library/Application Support/JetBrains/IntelliJIdea2023.3/javascript/extLibs/http_unpkg.com_material-components-web@latest_dist_material-components-web.js"></script>
-    <link rel="stylesheet"
-          href="../../Library/Application Support/JetBrains/IntelliJIdea2023.3/javascript/extLibs/http_unpkg.com_material-components-web@latest_dist_material-components-web.css">
 </head>
 <body>
-
-<!--<link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">-->
-<!--<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>-->
 <canvas class="output_canvas" id="output_canvas" width="1920px" height="1080px"
         style="z-index: -2;position: absolute;pointer-events: none;width: 100%;display: none"></canvas>
-<div style="width: 100%;height:100vh;display: flex;justify-content: center;align-items: center;flex-direction: column">
+<div style="width: 100vw;height:100vh;display: flex;align-items: center;flex-direction: column">
     <button id="webcamButton"
-            style="font-size: xxx-large;color: white;border: none;background-color: black">START
+            style="font-size: xxx-large;color: white;border: none;background-color: black;margin-top: 30%">START
     </button>
-    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;width: 100%">
+    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;width: 100vw">
         <div style="display: flex;flex-direction: row;width: 100%">
             <h1 id="gestureName" class="gestureInfo"
-                style="width: 5%;font-size: xxx-large;text-align: center;margin: 5%;height:fit-content;"></h1>
-            <!--            <div style="display: flex;flex-direction: column;width: 16vw;margin-left: 2%;align-items: center;margin-top: 2%">-->
-            <!--                -->
-            <!--                &lt;!&ndash;                <p id="gestureDetail" style="color: white;max-width: 20vw;text-align: left;margin-top: 10%"></p>&ndash;&gt;-->
-            <!--            </div>-->
+                style="width: 5%;font-size: 60px;text-align: center;margin: 5%;height:fit-content;"></h1>
             <video autoplay muted id="video" src=""
-                   style="display: none;width: 65vw;height: 65vh;margin-right: 2%"></video>
-            <div style="display: flex;flex-direction: column-reverse;width: 15%;text-align: left;margin-top: 10%;margin-right: 5%;font-size: 20px">
-                <p id="gestureDetail" style="color: white;writing-mode: vertical-lr;" class="gestureInfo"></p>
+                   style="display: none;width: 70vw;height: 70vh;"></video>
+            <div style="display: flex;flex-direction: column;width: 15%;text-align: left;font-size: 22px;margin-top: 5%">
+                <p id="gestureDetail"
+                   style="color: white;writing-mode: vertical-lr;align-items: center;width: 100%;"
+                   class="gestureInfo"></p>
             </div>
-
         </div>
-        <img id="gestureImg" style="opacity: 0;width: 300px;display: none" src="" alt=""/>
+        <img id="gestureImg" style="opacity: 0;width: 250px;display: none" src="" alt=""/>
+        <p id="reminder" style="opacity: 0;color: white">请按提示做出手势</p>
     </div>
-    <!--    <div style="display: flex;flex-direction: row;justify-content: center;align-items: center;width: 100%">
-            <h1 id="gestureName"
-                style="width: 5%;font-size: xxx-large;text-align: center;margin-left: 5%"></h1>
-            <div style="display: flex;flex-direction: column;width: 85%;align-items: center">
-                <video autoplay muted id="video" src=""
-                       style="display: none;width: 70vw;height: 70vh"></video>
-                <img id="gestureImg" style="opacity: 0;width: 300px;display: none" src="" alt=""/>
-            </div>
-            <p id="gestureDetail" style="color: white;width: 15vw;text-align: left;margin-top: 10%;margin-right: 5%"></p>
-        </div>-->
 
     <audio id="sound" autoplay src=""></audio>
 </div>

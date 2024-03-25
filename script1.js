@@ -35,10 +35,11 @@ let soundIndex;
 let edSoundIndex;
 const gestureInfo = [
     {name: "万字纹", detail: "<p>万字纹是一种由两条直线交叉形成的图形，</p><p>象征着无穷、永恒、万事如意。</p>"},
-    {name: "龟背纹", detail: "<p>龟背纹是以六边形为基本单元连缀而成的四方连续纹样，</p><p>表现人间高寿、吉祥的美好愿景。</p>"}
+    {
+        name: "龟背纹",
+        detail: "<p>龟背纹是以六边形为基本单元</p><p>连缀而成的四方连续纹样，</p></p><p>表现人间高寿、吉祥的美好愿景。</p>"
+    }
 ];
-// let index = 0;
-
 // Before we can use HandLandmarker class we must wait for it to finish
 // loading. Machine Learning models can be large and take a moment to
 // get everything needed to run.
@@ -52,10 +53,10 @@ const createGestureRecognizer = async () => {
         },
         runningMode: runningMode,
         numHands: num_hand,
-        min_hand_presence_confidence: 0.9,
-        minHandPresenceConfidence: 0.9,
-        min_hand_detection_confidence: 0.9,
-        minHandDetectionConfidence: 0.9
+        // min_hand_presence_confidence: 0.9,
+        // minHandPresenceConfidence: 0.9,
+        // min_hand_detection_confidence: 0.9,
+        // minHandDetectionConfidence: 0.9
     });
     demosSection.classList.remove("invisible");
 };
@@ -94,6 +95,7 @@ const sound = document.getElementById("sound");
 const gestureName = document.getElementById("gestureName");
 const gestureDetail = document.getElementById("gestureDetail");
 const info = document.getElementsByClassName("gestureInfo");
+const reminder = document.getElementById("reminder");
 
 // Check if webcam access is supported.
 function hasGetUserMedia() {
@@ -123,12 +125,14 @@ function enableCam(event) {
         enableWebcamButton.style.display = "none";
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
+        reminder.style.opacity = "1";
     } else {
         webcamRunning = true;
         // enableWebcamButton.innerText = "DISABLE PREDICTIONS";
         enableWebcamButton.style.display = "none";
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
+        reminder.style.opacity = "1";
     }
     // get Usermedia parameters.
     const constraints = {
@@ -155,8 +159,11 @@ async function predictWebcam() {
     if (runningMode === "IMAGE") {
         runningMode = "VIDEO";
         await gestureRecognizer.setOptions({
-            runningMode: "VIDEO", numHands: 2, minHandPresenceConfidence: 0.9, min_hand_detection_confidence: 0.9,
-            minHandDetectionConfidence: 0.9
+            runningMode: "VIDEO",
+            numHands: 2,
+            // minHandPresenceConfidence: 0.9,
+            // min_hand_detection_confidence: 0.9,
+            // minHandDetectionConfidence: 0.9
         });
     }
     let nowInMs = Date.now();
@@ -233,6 +240,7 @@ async function predictWebcam() {
                 sound.src = "/sound/" + ingSounds[currentCount][soundIndex];
                 console.log("更新声音");
                 gestureImg.style.opacity = "0"
+                reminder.style.opacity = "0";
                 console.log("currentCount1:", currentCount);
                 enableWebcamButton.style.display = "none";
                 video1.addEventListener("ended", event => {
@@ -243,6 +251,7 @@ async function predictWebcam() {
             } else if (lastResults[lastResults.length - 1] !== categoryName) { // 检测手势在变化
                 lastResults = [];
                 gestureImg.style.opacity = "1";
+                reminder.style.opacity = "1";
             }
         } else {
             finalOutput.innerText = "none";
@@ -272,13 +281,14 @@ function judgeEnd(categoryName) {
     if (currentCount < newGes.length - 1 && newGes.length > 1) {
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
+        reminder.style.opacity = "1";
         gestureImg.src = "/img/" + newGes[currentCount] + ".png";
         console.log("currentCount:", currentCount, ";recorded:", recorded);
     } else {
         if (currentCount === newGes.length - 1) {
             video1.src = "/video/" + newGes[currentCount] + ".mp4";
-            video1.style.width = "65vw";
-            video1.style.height = "65vh";
+            video1.style.width = "70vw";
+            video1.style.height = "70vh";
             video1.addEventListener("canplaythrough", () => {
                 sound.src = "/sound/" + edSounds[edSoundIndex][soundIndex];
                 console.log("更新最终展示音效");
@@ -300,8 +310,9 @@ function endGes() {
     info[1].style.opacity = 0;
     gestureImg.style.display = "block";
     gestureImg.style.opacity = "1";
-    video1.style.width = "65vw";
-    video1.style.height = "65vh";
+    reminder.style.opacity = "1";
+    video1.style.width = "70vw";
+    video1.style.height = "70vh";
     video1.src = "";
     video1.poster = "";
     video1.style.display = "none";
