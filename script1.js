@@ -33,6 +33,10 @@ const ingSounds = [["ing_syn_0.wav", "ing_ope_0.wav"], ["ing_syn_1.wav", "ing_op
 const edSounds = [["ed_syn_0.wav", "ed_ope_0.wav"], ["ed_syn_1.wav", "ed_ope_1.wav"]];
 let soundIndex;
 let edSoundIndex;
+const gestureInfo = [
+    {name: "万字纹", detail: "<p>万字纹是一种由两条直线交叉形成的图形，</p><p>象征着无穷、永恒、万事如意。</p>"},
+    {name: "龟背纹", detail: "<p>龟背纹是以六边形为基本单元连缀而成的四方连续纹样，</p><p>表现人间高寿、吉祥的美好愿景。</p>"}
+];
 // let index = 0;
 
 // Before we can use HandLandmarker class we must wait for it to finish
@@ -87,6 +91,8 @@ const gestureOutput2 = document.getElementById("gesture_output2");
 const finalOutput = document.getElementById("final_output");
 const video1 = document.getElementById("video");
 const sound = document.getElementById("sound");
+const gestureName = document.getElementById("gestureName");
+const gestureDetail = document.getElementById("gestureDetail");
 
 // Check if webcam access is supported.
 function hasGetUserMedia() {
@@ -105,8 +111,8 @@ if (hasGetUserMedia()) {
 // Enable the live webcam view and start detection.
 function enableCam(event) {
     video1.style.display = "block";
-    document.getElementById("output_canvas").style.zIndex = "99"
-    document.getElementById("output_canvas").style.display = "block"
+    document.getElementById("output_canvas").style.zIndex = "99";
+    document.getElementById("output_canvas").style.display = "block";
     if (!gestureRecognizer) {
         alert("Please wait for gestureRecognizer to load");
         return;
@@ -122,7 +128,6 @@ function enableCam(event) {
         enableWebcamButton.style.display = "none";
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
-        // document.getElementById("canvas").style.zIndex="100"
     }
     // get Usermedia parameters.
     const constraints = {
@@ -139,8 +144,6 @@ let lastVideoTime = -1;
 let results = undefined;
 let categoryName1;
 
-// let categoryName;
-
 async function predictWebcam() {
     if (enableWebcamButton.style.display === 'none') {
         video1.style.display = "block";
@@ -155,7 +158,6 @@ async function predictWebcam() {
             minHandDetectionConfidence: 0.9
         });
     }
-    // await gestureRecognizer.setOptions({ numHands: 2 })
     let nowInMs = Date.now();
     if (video.currentTime !== lastVideoTime) {
         lastVideoTime = video.currentTime;
@@ -185,7 +187,6 @@ async function predictWebcam() {
         }
     }
     canvasCtx.restore();
-    // console.log(results)
     if (results.gestures.length > 1) {
         gestureOutput1.style.display = "block";
         gestureOutput1.style.width = videoWidth;
@@ -209,104 +210,37 @@ async function predictWebcam() {
         // const point = [results.landmarks[0][0].x, results.landmarks[0][0].y, results.landmarks[0][0].z];
         // const point1 = [results.landmarks[1][0].x, results.landmarks[1][0].y, results.landmarks[1][0].z];
         // console.log(video1.src)
+
         if (categoryName === "turtle" && categoryName1 === "turtle") {
             categoryName = "turtle0";
             categoryName1 = "turtle0";
         }
         if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 65 && categoryScore > 65) {
-            finalOutput.innerText = categoryName
+            finalOutput.innerText = categoryName;
             // 第一次比出这个手势
             if (lastResults.filter((item) => item === categoryName).length === 100 && currentCount < newGes.length && categoryName !== lastResult) {
-                // if (categoryName === '万字纹2-samples' || categoryName === '万字纹1-samples') {
-                // console.log(categoryName);
+                gestureName.style.border = "double 3px white";
+                gestureName.innerText = gestureInfo[index].name;
+                gestureDetail.innerHTML = gestureInfo[index].detail;
                 lastResult = categoryName
                 lastResults = [];
                 video1.src = "/video/" + newGes[currentCount] + ".mp4";
                 video1.style.display = "block";
                 gestureImg.style.display = "block";
-                // if (currentCount === newGes.length) {
-                //     console.log("===")
-                //     sound.src = "/sound/" + edSounds[edSoundIndex][soundIndex];
-                // } else {
-                //     sound.src = "/sound/" + ingSounds[currentCount][soundIndex];
-                // }
                 sound.src = "/sound/" + ingSounds[currentCount][soundIndex];
                 console.log("更新声音");
-                // gestureImg.style.opacity = "1";
-                // gestureImg.src = "img/" + newGes[currentCount] + ".png";
                 gestureImg.style.opacity = "0"
                 console.log("currentCount1:", currentCount);
-                // }
-                // currentCount++;
                 enableWebcamButton.style.display = "none";
-                // gestureImg.style.display = "block";
-                // gestureImg.style.opacity = "0";
-                // video1.pause();
-                // video1.currentTime = 1
-                /*
-                                video1.addEventListener("ended", function () {
-                                    // currentCount++;
-                                    // video1.src = "/video/" + newGes[currentCount] + ".mp4";
-                                    console.log("currentCount2", currentCount);
-                                    if (!(currentCount < newGes.length)) {
-                                        recorded = []
-                                    }
-                                    // currentCount++;
-                                    if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== categoryName)) {
-                                        recorded.push(categoryName)
-                                        currentCount++;
-                                        // gestureImg.style.opacity = "0"
-                                    }
-                                    if (currentCount < newGes.length && newGes.length > 1) {
-                                        if (currentCount !== 0) {
-                                            video1.poster = "/video/" + newGes[currentCount] + ".png";
-                                        }
-                                        gestureImg.style.display = "block";
-                                        gestureImg.style.opacity = "1";
-                                        gestureImg.src = "img/" + newGes[currentCount] + ".png";
-                                    } else {
-                                        console.log("这个手势结束了，即将换新手势……");
-                                        gestureImg.style.display = "none";
-                                        gestureImg.style.opacity = "0";
-                                        // video1.style.display = "none";
-                                        video1.src = "";
-                                        video1.poster = "";
-                                        video1.style.display = "none";
-                                        // recorded = []
-                                        // enableWebcamButton.style.display = "block";
-                                        newGesture();
-                                        // video1.removeEventListener("ended",newGesture);
-                                        // currentCount = 0
-                                    }
-                                    // video1.style.display = "none";
-                                    // gestureImg.style.display = "block";
-                                    // gestureImg.style.opacity = "0";
-                                    // gestureImg.src = "img/" + newGes[currentCount] + ".png";
-
-                                    // console.log(gestureImg.src);
-                                    // video1.src = "";
-                                    // enableWebcamButton.style.display = "block";
-                                    // lastResult = "";
-                                    // lastResults = [];
-                                }, {once: true})
-                */
                 video1.addEventListener("ended", event => {
                     judgeEnd(categoryName)
                 }, {once: true})
-                // lastResults = []
             } else if (lastResults[lastResults.length - 1] === categoryName || lastResults.length === 0) { // 检测维持在一个手势
                 lastResults.push(categoryName);
-                // gestureImg.style.display = "none";
-                // gestureImg.style.opacity = "0";
             } else if (lastResults[lastResults.length - 1] !== categoryName) { // 检测手势在变化
                 lastResults = [];
-                // gestureImg.style.display = "block";
                 gestureImg.style.opacity = "1";
             }
-
-            // lastResults.append(categoryName)
-            // if (lastResults.length > 10) lastResults.slice(0, 9);
-            // console.log(video1.src)
         } else {
             finalOutput.innerText = "none";
         }
@@ -327,29 +261,21 @@ function judgeEnd(categoryName) {
         recorded.push(categoryName);
         currentCount++;
         console.log("currentCount++:", currentCount, ";recorded:", recorded);
-        // gestureImg.style.opacity = "0"
     }
-    // console.log("currentCount2", currentCount);
     if (currentCount !== 0) {
         console.log("换封面");
         video1.poster = "/video/" + newGes[currentCount] + ".png";
     }
     if (currentCount < newGes.length - 1 && newGes.length > 1) {
-        // if (currentCount !== 0) {
-        //     console.log("换封面");
-        //     video1.poster = "/video/" + newGes[currentCount] + ".png";
-        // }
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
         gestureImg.src = "/img/" + newGes[currentCount] + ".png";
-        // console.log(results)
         console.log("currentCount:", currentCount, ";recorded:", recorded);
     } else {
         if (currentCount === newGes.length - 1) {
-            // video1.poster = "";
             video1.src = "/video/" + newGes[currentCount] + ".mp4";
-            video1.style.width = "70vw";
-            video1.style.height = "70vh";
+            video1.style.width = "65vw";
+            video1.style.height = "65vh";
             video1.addEventListener("canplaythrough", () => {
                 sound.src = "/sound/" + edSounds[edSoundIndex][soundIndex];
                 console.log("更新最终展示音效");
@@ -359,7 +285,6 @@ function judgeEnd(categoryName) {
             })
             video1.addEventListener("ended", endGes, {once: true})
         }
-        // console.log(results)
     }
 
 }
@@ -370,16 +295,13 @@ function endGes() {
     console.log("这个手势结束了，即将换新手势……");
     gestureImg.style.display = "block";
     gestureImg.style.opacity = "1";
-    video1.style.width = "70vw";
-    video1.style.height = "70vh";
-    // video1.style.display = "none";
+    video1.style.width = "65vw";
+    video1.style.height = "65vh";
     video1.src = "";
     video1.poster = "";
     video1.style.display = "none";
-
-    // recorded = []
-    // enableWebcamButton.style.display = "block";
+    gestureName.innerText = "";
+    gestureDetail.innerText = "";
+    gestureName.style.border = "";
     newGesture();
-    // video1.removeEventListener("ended",newGesture);
-    // currentCount = 0
 }

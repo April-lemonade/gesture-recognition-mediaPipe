@@ -22,13 +22,19 @@ body {
 }
 
 h1 {
-    color: #007f8b;
+    /*width: 20px;*/
+    /*margin: 0 auto;*/
+    /*line-height: 32px;*/
+    color: white;
+    writing-mode: tb-lr;
 }
 
 h2 {
     clear: both;
 }
-
+#gestureDetail{
+    writing-mode: tb-lr;
+}
 video {
     clear: both;
     display: block;
