@@ -93,6 +93,7 @@ const video1 = document.getElementById("video");
 const sound = document.getElementById("sound");
 const gestureName = document.getElementById("gestureName");
 const gestureDetail = document.getElementById("gestureDetail");
+const info = document.getElementsByClassName("gestureInfo");
 
 // Check if webcam access is supported.
 function hasGetUserMedia() {
@@ -222,6 +223,8 @@ async function predictWebcam() {
                 gestureName.style.border = "double 3px white";
                 gestureName.innerText = gestureInfo[index].name;
                 gestureDetail.innerHTML = gestureInfo[index].detail;
+                info[0].style.opacity = 1;
+                info[1].style.opacity = 1;
                 lastResult = categoryName
                 lastResults = [];
                 video1.src = "/video/" + newGes[currentCount] + ".mp4";
@@ -293,6 +296,8 @@ function endGes() {
     lastResults = [];
     currentCount = 0;
     console.log("这个手势结束了，即将换新手势……");
+    info[0].style.opacity = 0;
+    info[1].style.opacity = 0;
     gestureImg.style.display = "block";
     gestureImg.style.opacity = "1";
     video1.style.width = "65vw";

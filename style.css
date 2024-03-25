@@ -32,9 +32,11 @@ h1 {
 h2 {
     clear: both;
 }
-#gestureDetail{
+
+#gestureDetail {
     writing-mode: tb-lr;
 }
+
 video {
     clear: both;
     display: block;
@@ -50,6 +52,11 @@ section {
 }
 
 #gestureImg {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.gestureInfo {
     opacity: 0;
     transition: opacity 1s ease-in-out;
 }
