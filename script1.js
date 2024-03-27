@@ -75,7 +75,8 @@ function newGesture() {
     if (index < steps.length - 1) {
         index = index + 1;
     } else {
-        index = 0;
+        // index = 0;
+        location.reload();
     }
     console.log("index", index);
     newGes = steps[index];
@@ -150,10 +151,12 @@ let results = undefined;
 let categoryName1;
 
 async function predictWebcam() {
+    if (lastResults.filter((item) => item === "none").length === 3000) {
+        location.reload();
+    }
     if (enableWebcamButton.style.display === 'none') {
         video1.style.display = "block";
     }
-
     const webcamElement = document.getElementById("webcam");
     // Now let's start detecting the stream.
     if (runningMode === "IMAGE") {
@@ -219,6 +222,7 @@ async function predictWebcam() {
         // const point1 = [results.landmarks[1][0].x, results.landmarks[1][0].y, results.landmarks[1][0].z];
         // console.log(video1.src)
 
+
         if (categoryName === "turtle" && categoryName1 === "turtle") {
             categoryName = "turtle0";
             categoryName1 = "turtle0";
@@ -259,6 +263,8 @@ async function predictWebcam() {
     } else {
         gestureOutput1.style.display = "none";
         gestureOutput2.style.display = "none";
+        console.log("none");
+        lastResults.push("none");
     }
     // Call this function again to keep predicting when the browser is ready.
     if (webcamRunning === true) {
@@ -303,11 +309,14 @@ function judgeEnd(categoryName) {
 }
 
 function endGes() {
+    // if (index === steps.length - 1) {
+    //     location.reload();
+    // }
     lastResults = [];
     currentCount = 0;
     console.log("这个手势结束了，即将换新手势……");
-    info[0].style.opacity = 0;
-    info[1].style.opacity = 0;
+    info[0].style.opacity = "0";
+    info[1].style.opacity = "0";
     gestureImg.style.display = "block";
     gestureImg.style.opacity = "1";
     reminder.style.opacity = "1";

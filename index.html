@@ -8,7 +8,7 @@
 <body>
 <canvas class="output_canvas" id="output_canvas" width="1920px" height="1080px"
         style="z-index: -2;position: absolute;pointer-events: none;width: 100%;display: none"></canvas>
-<div style="width: 100vw;height:100vh;display: flex;align-items: center;flex-direction: column">
+<div style="width: 100%;height:100vh;display: flex;align-items: center;flex-direction: column">
     <button id="webcamButton"
             style="font-size: xxx-large;color: white;border: none;background-color: black;margin-top: 30%">START
     </button>
@@ -18,11 +18,9 @@
                 style="width: 5%;font-size: 60px;text-align: center;margin: 5%;height:fit-content;"></h1>
             <video autoplay muted id="video" src=""
                    style="display: none;width: 70vw;height: 70vh;"></video>
-            <div style="display: flex;flex-direction: column;width: 15%;text-align: left;font-size: 22px;margin-top: 5%">
-                <p id="gestureDetail"
-                   style="color: white;writing-mode: vertical-lr;align-items: center;width: 100%;"
-                   class="gestureInfo"></p>
-            </div>
+            <p id="gestureDetail"
+               style="color: white;writing-mode: vertical-lr;align-items: center;width: 15%;font-size: 22px;margin-top: 5%"
+               class="gestureInfo"></p>
         </div>
         <img id="gestureImg" style="opacity: 0;width: 250px;display: none" src="" alt=""/>
         <p id="reminder" style="opacity: 0;color: white">请按提示做出手势</p>
@@ -54,6 +52,12 @@
 <!-- partial -->
 <script type="module" src="script1.js"></script>
 <style>
+    * {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
     body {
         margin: 0;
         padding: 0;
