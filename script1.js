@@ -29,7 +29,10 @@ let currentCount = 0;
 const gestureImg = document.getElementById("gestureImg");
 let newGes;
 let recorded = [];
-const ingSounds = [["ing_syn_0_0.wav", "ing_syn_1_0.wav", "ing_ope_0_0.wav", "ing_ope_1_0.wav"], ["ing_syn_0_1.wav", "ing_syn_1_1.wav", "ing_ope_0_1.wav", "ing_ope_1_1.wav"]];
+const ingSounds = [
+    ["ing_syn_0_0.wav", "ing_syn_1_0.wav", "ing_ope_0_0.wav", "ing_ope_1_0.wav"],
+    ["ing_syn_0_1.wav", "ing_syn_1_1.wav", "ing_ope_0_1.wav", "ing_ope_1_1.wav"]
+];
 const edSounds = ["ed_syn_0.wav", "ed_syn_1.wav", "ed_ope_0.wav", "ed_ope_1.wav"];
 let soundIndex;
 let edSoundIndex;
@@ -313,17 +316,20 @@ function judgeEnd(categoryName) {
             }, {once: true});
             sound.addEventListener("ended", () => {
                 sound.src = "";
+                if(video1.ended){
+                    if (index === steps.length - 1) {
+                        location.reload();
+                    }
+                    endGes();
+                }
             })
-            video1.addEventListener("ended", endGes, {once: true})
+            // video1.addEventListener("ended", endGes, {once: true})
         }
     }
 
 }
 
 function endGes() {
-    if (index === steps.length - 1) {
-        location.reload();
-    }
     lastResults = [];
     currentCount = 0;
     console.log("这个手势结束了，即将换新手势……");
