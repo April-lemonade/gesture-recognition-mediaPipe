@@ -29,8 +29,8 @@ let currentCount = 0;
 const gestureImg = document.getElementById("gestureImg");
 let newGes;
 let recorded = [];
-const ingSounds = [["ing_syn_0.wav", "ing_ope_0.wav"], ["ing_syn_1.wav", "ing_ope_1.wav"], ["ing_syn_2.wav", "ing_ope_2.wav"]];
-const edSounds = [["ed_syn_0.wav", "ed_ope_0.wav"], ["ed_syn_1.wav", "ed_ope_1.wav"]];
+const ingSounds = [["ing_syn_0_0.wav", "ing_syn_1_0.wav", "ing_ope_0_0.wav", "ing_ope_1_0.wav"], ["ing_syn_0_1.wav", "ing_syn_1_1.wav", "ing_ope_0_1.wav", "ing_ope_1_1.wav"]];
+const edSounds = ["ed_syn_0.wav", "ed_syn_1.wav", "ed_ope_0.wav", "ed_ope_1.wav"];
 let soundIndex;
 let edSoundIndex;
 const gestureInfo = [
@@ -40,6 +40,7 @@ const gestureInfo = [
         detail: "<p>龟背纹是以六边形为基本单元</p><p>连缀而成的四方连续纹样，</p></p><p>表现人间高寿、吉祥的美好愿景。</p>"
     }
 ];
+
 // Before we can use HandLandmarker class we must wait for it to finish
 // loading. Machine Learning models can be large and take a moment to
 // get everything needed to run.
@@ -60,12 +61,21 @@ const createGestureRecognizer = async () => {
     });
     demosSection.classList.remove("invisible");
 };
-createGestureRecognizer();
+createGestureRecognizer().then(r => {
+    if (hasGetUserMedia()) {
+        enableWebcamButton = document.getElementById("webcamButton");
+        // enableWebcamButton.addEventListener("click", enableCam);
+        enableCam();
+
+    } else {
+        console.warn("getUserMedia() is not supported by your browser");
+    }
+});
 
 let index = -1
 
 function newGesture() {
-    soundIndex = Math.round(Math.random());
+    soundIndex = Math.round(Math.random() * ingSounds.length);
     edSoundIndex = Math.round(Math.random());
     lastResult = "";
     lastResults = [];
@@ -105,12 +115,14 @@ function hasGetUserMedia() {
 
 // If webcam supported, add event listener to button for when user
 // wants to activate it.
-if (hasGetUserMedia()) {
+/*if (hasGetUserMedia()) {
     enableWebcamButton = document.getElementById("webcamButton");
     enableWebcamButton.addEventListener("click", enableCam);
+    enableCam();
+
 } else {
     console.warn("getUserMedia() is not supported by your browser");
-}
+}*/
 
 // Enable the live webcam view and start detection.
 function enableCam(event) {
@@ -151,7 +163,7 @@ let results = undefined;
 let categoryName1;
 
 async function predictWebcam() {
-    if (lastResults.filter((item) => item === "none").length === 3000) {
+    if (lastResults.filter((item) => item === "none").length === 3000) { // 中途间隔一段时间没有手势就从头开始
         location.reload();
     }
     if (enableWebcamButton.style.display === 'none') {
@@ -296,7 +308,7 @@ function judgeEnd(categoryName) {
             video1.style.width = "70vw";
             video1.style.height = "70vh";
             video1.addEventListener("canplaythrough", () => {
-                sound.src = "/sound/" + edSounds[edSoundIndex][soundIndex];
+                sound.src = "/sound/" + edSounds[soundIndex];
                 console.log("更新最终展示音效");
             }, {once: true});
             sound.addEventListener("ended", () => {
@@ -309,9 +321,9 @@ function judgeEnd(categoryName) {
 }
 
 function endGes() {
-    // if (index === steps.length - 1) {
-    //     location.reload();
-    // }
+    if (index === steps.length - 1) {
+        location.reload();
+    }
     lastResults = [];
     currentCount = 0;
     console.log("这个手势结束了，即将换新手势……");
