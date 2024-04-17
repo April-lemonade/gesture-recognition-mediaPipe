@@ -130,6 +130,7 @@ const gestureDetail = document.getElementById("gestureDetail");
 const info = document.getElementsByClassName("gestureInfo");
 const reminder = document.getElementById("reminder");
 const progress = document.getElementById("progress");
+const progressValue = document.getElementById("progressValue");
 
 // Check if webcam access is supported.
 function hasGetUserMedia() {
@@ -270,7 +271,7 @@ async function predictWebcam() {
             finalOutput.innerText = categoryName;
             // 第一次比出这个手势
             if (lastResults.filter((item) => item === categoryName).length === 100 && currentCount < newGes.length && categoryName !== lastResult) {
-                progress.value = "0";
+                progressValue.style.width = "0%";
                 gestureName.style.border = "double 3px white";
                 gestureName.innerText = gestureInfo[index].name;
                 gestureDetail.innerHTML = gestureInfo[index].detail;
@@ -293,7 +294,7 @@ async function predictWebcam() {
                 }, {once: true})
             } else if (lastResults[lastResults.length - 1] === categoryName || lastResults.length === 0) { // 检测维持在一个手势
                 lastResults.push(categoryName);
-                progress.value = lastResults.filter((item) => item === newGes[currentCount]).length;
+                progressValue.style.width = `${lastResults.filter((item) => item === newGes[currentCount]).length}%`;
             } else if (lastResults[lastResults.length - 1] !== categoryName) { // 检测手势在变化
                 lastResults = [];
                 gestureImg.style.opacity = "1";
@@ -330,7 +331,7 @@ function judgeEnd(categoryName) {
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
         reminder.style.opacity = "1";
-        progress.value = "0";
+        progressValue.style.width = "0%";
         progress.style.opacity = "1";
         gestureImg.src = "/img/" + newGes[currentCount] + ".png";
         console.log("currentCount:", currentCount, ";recorded:", recorded);
@@ -345,16 +346,16 @@ function judgeEnd(categoryName) {
                 sound.src = "/sound/" + edSounds[soundIndex];
                 console.log("更新最终展示音效");
             }, {once: true});
-            sound.addEventListener("ended", () => {
-                sound.src = "";
-                if (video1.ended) {
-                    if (index === steps.length - 1) {
-                        location.reload();
-                    }
-                    endGes();
-                }
-            })
-            // video1.addEventListener("ended", endGes, {once: true})
+            // sound.addEventListener("ended", () => {
+            //     sound.src = "";
+            //     if (video1.ended) {
+            //         if (index === steps.length - 1) {
+            //             location.reload();
+            //         }
+            //         endGes();
+            //     }
+            // })
+            video1.addEventListener("ended", endGes, {once: true})
         }
     }
 
@@ -374,10 +375,11 @@ function endGes() {
     // video1.style.height = "70vh";
     video1.src = "";
     video1.poster = "";
+    sound.src = "";
     video1.style.display = "none";
     gestureName.innerText = "";
     gestureDetail.innerText = "";
     gestureName.style.border = "";
-    progress.value = "0";
+    progressValue.style.width = "0%";
     newGesture();
 }

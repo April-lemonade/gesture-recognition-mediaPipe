@@ -25,7 +25,10 @@
         </div>
         <div style="position: fixed;bottom: 0;align-items: center;display: flex;flex-direction: column;z-index:1 ">
             <img id="gestureImg" style="opacity: 0;width: 20%;display: none" src="" alt=""/>
-            <progress id="progress" style="opacity: 1"  max="100" value="0"></progress>
+<!--            <progress id="progress" style="opacity: 1"  max="100" value="0"></progress>-->
+            <div class="g-container" id="progress">
+                <div class="g-progress" id="progressValue"></div>
+            </div>
             <p id="reminder" style="opacity: 0;color: white">请按提示做出手势</p>
         </div>
         <!--<img id="gestureImg" style="opacity: 0;width: 250px;display: none;" src="" alt=""/>
