@@ -25,7 +25,7 @@ const videoHeight = "360px";
 const videoWidth = "720px";
 let lastResult = "";
 let lastResults = [];
-let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"], ["phoenix0"]];
+let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"], ["phoenix0","phoenix1"]];
 let currentCount = 0;
 const gestureImg = document.getElementById("gestureImg");
 let newGes;
