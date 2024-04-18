@@ -141,7 +141,7 @@ section {
     border-radius: 25px;
     /*background: #eee;*/
     border: solid #eee;
-    transition: opacity 500ms ease-in-out;
+    /*transition: opacity 500ms ease-in-out;*/
     margin: 1%;
 }
 .g-progress {
@@ -149,6 +149,6 @@ section {
     height: inherit;
     border-radius: 25px 0 0 25px;
     background: #ffffff;
-    transition: width .1s linear;
+    /*transition: width 300ms linear;*/
 
 }

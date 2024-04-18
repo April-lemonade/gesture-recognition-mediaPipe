@@ -25,7 +25,7 @@ const videoHeight = "360px";
 const videoWidth = "720px";
 let lastResult = "";
 let lastResults = [];
-let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"], ["phoenix0","phoenix1"]];
+let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"], ["phoenix0", "phoenix1"]];
 let currentCount = 0;
 const gestureImg = document.getElementById("gestureImg");
 let newGes;
@@ -267,11 +267,13 @@ async function predictWebcam() {
         //     categoryName1 = "turtle0";
         // }
         if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 55 && categoryScore > 55) {
+            // progressValue.style.width = "0%";
             console.log(categoryName)
             finalOutput.innerText = categoryName;
             // 第一次比出这个手势
             if (lastResults.filter((item) => item === categoryName).length === 100 && currentCount < newGes.length && categoryName !== lastResult) {
-                progressValue.style.width = "0%";
+                progressValue.style.width = "100%";
+                lastResults = [];
                 gestureName.style.border = "double 3px white";
                 gestureName.innerText = gestureInfo[index].name;
                 gestureDetail.innerHTML = gestureInfo[index].detail;
@@ -287,10 +289,12 @@ async function predictWebcam() {
                 gestureImg.style.opacity = "0"
                 reminder.style.opacity = "0";
                 progress.style.opacity = "0";
+                // progressValue.style.width = "0%";
                 console.log("currentCount1:", currentCount);
                 enableWebcamButton.style.display = "none";
                 video1.addEventListener("ended", event => {
-                    judgeEnd(categoryName)
+                    judgeEnd(categoryName);
+                    progressValue.style.width = "0%";
                 }, {once: true})
             } else if (lastResults[lastResults.length - 1] === categoryName || lastResults.length === 0) { // 检测维持在一个手势
                 lastResults.push(categoryName);
@@ -316,6 +320,7 @@ async function predictWebcam() {
 }
 
 function judgeEnd(categoryName) {
+
     lastResults = [];
     if (currentCount < newGes.length && (recorded.length === 0 || recorded[recorded.length - 1] !== categoryName)) {
         console.log("完成一步了", recorded);
@@ -331,7 +336,7 @@ function judgeEnd(categoryName) {
         gestureImg.style.display = "block";
         gestureImg.style.opacity = "1";
         reminder.style.opacity = "1";
-        progressValue.style.width = "0%";
+        // progressValue.style.width = "0%";
         progress.style.opacity = "1";
         gestureImg.src = "/img/" + newGes[currentCount] + ".png";
         console.log("currentCount:", currentCount, ";recorded:", recorded);
