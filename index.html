@@ -16,16 +16,16 @@
     <div id="content" style="display: none;flex-direction: column;align-items: center;width: 100vw;height: 100vh;">
         <div style="display: flex;flex-direction: row;width: 100%;justify-content: space-between">
             <h1 id="gestureName" class="gestureInfo"
-                style="width: 5%;font-size: 60px;text-align: center;margin: 5%;height:fit-content;z-index: 1;position: relative"></h1>
+                style="width: 5%;font-size: 60px;text-align: center;margin: 5%;height:fit-content;z-index: 1;position: relative;display: none"></h1>
             <video autoplay muted id="video" src=""
                    style="display: none;width: 100vw;height: 100vh;z-index: -1;position: absolute"></video>
             <p id="gestureDetail"
-               style="color: white;writing-mode: vertical-lr;width: 15%;font-size: 22px;margin-top: 5%;justify-content: center;display: flex;flex-direction: column;z-index: 1"
+               style="color: white;writing-mode: vertical-lr;width: 15%;font-size: 22px;margin-top: 5%;justify-content: center;display: none;flex-direction: column;z-index: 1"
                class="gestureInfo"></p>
         </div>
         <div style="position: fixed;bottom: 0;align-items: center;display: flex;flex-direction: column;z-index:1 ">
             <img id="gestureImg" style="opacity: 0;width: 20%;display: none" src="" alt=""/>
-<!--            <progress id="progress" style="opacity: 1"  max="100" value="0"></progress>-->
+            <!--            <progress id="progress" style="opacity: 1"  max="100" value="0"></progress>-->
             <div class="g-container" id="progress">
                 <div class="g-progress" id="progressValue"></div>
             </div>
@@ -34,7 +34,6 @@
         <!--<img id="gestureImg" style="opacity: 0;width: 250px;display: none;" src="" alt=""/>
         <p id="reminder" style="opacity: 0;color: white">请按提示做出手势</p>-->
     </div>
-
     <audio id="sound" autoplay src=""></audio>
 </div>
 
