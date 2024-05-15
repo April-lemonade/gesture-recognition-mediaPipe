@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title> MediaPipe HandGestureRecognizer Task for web</title>
     <link rel="stylesheet" href="style.css">
+    <meta http-equiv="Page-Exit" content="revealTrans(Duration=3,Transition=23)">
 </head>
 <body>
 <canvas class="output_canvas" id="output_canvas" width="1920px" height="1080px"
         style="z-index: -2;position: absolute;pointer-events: none;width: 100%;display: none"></canvas>
-<div style="width: 100vw;height:100vh;display: flex;align-items: center;flex-direction: column">
+<div style="width: 100vw;height:100vh;display: none;align-items: center;flex-direction: column">
     <button id="webcamButton"
             style="font-size: xxx-large;color: white;border: none;background-color: black;display: none">
         LOADING
@@ -36,7 +37,17 @@
     </div>
     <audio id="sound" autoplay src=""></audio>
 </div>
+<div style="width: 100%;height: 100vh;display: flex;flex-direction: column;align-items: center;justify-content: center">
+    <div style="font-family: FZZJ-GFSTJW,serif;font-size: 60pt">纹样互动：几何手势</div>
+    <img src="./img/img.png" alt=""/>
+    <div style="font-family: FZZILSS-B--GB1-0,serif;text-align: center;margin-top: 3%;line-height: 28pt">
+        <div style="font-weight: bold;font-size: 25pt">互动说明：</div>
+        <div style="font-size: 18pt">看图模仿相应的手势，触发纹样展示与介绍</div>
+        <img style="width: 15%;margin-top: 10%" src="img/wan0.png" alt=""/>
+        <div style="font-size: 16pt">做出手势，开始互动</div>
+    </div>
 
+</div>
 
 <section id="demos" class="invisible" style="display: none">
     <div id="liveView" class="videoView">
@@ -57,16 +68,26 @@
     </div>
 </section>
 <!-- partial -->
-<script type="module" src="script1.js"></script>
+<script type="module" src="start.js"></script>
 <style>
     * {
         margin: 0;
         padding: 0;
         overflow: hidden;
         cursor: none;
+        color: white;
     }
 
     body {
+        opacity: 1;
+        margin: 0;
+        padding: 0;
+        background-color: black;
+        transition: opacity 1s ease-in-out;
+    }
+
+    body.fade-in {
+        opacity: 0;
         margin: 0;
         padding: 0;
         background-color: black;

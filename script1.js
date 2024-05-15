@@ -108,7 +108,8 @@ function newGesture() {
         index = index + 1;
     } else {
         // index = 0;
-        location.reload();
+        // location.reload();
+        window.location.href = "index.html"
     }
     console.log("index", index);
     newGes = steps[index];
@@ -191,7 +192,8 @@ let categoryName1;
 
 async function predictWebcam() {
     if (lastResults.filter((item) => item === "none").length === 3000) { // 中途间隔一段时间没有手势就从头开始
-        location.reload();
+        // location.reload();
+        window.location.href = "index.html"
     }
     if (enableWebcamButton.style.display === 'none') {
         video1.style.display = "block";
@@ -388,3 +390,8 @@ function endGes() {
     progressValue.style.width = "0%";
     newGesture();
 }
+
+// 页面加载时，给body添加fade-in类，触发淡入效果
+document.addEventListener("DOMContentLoaded", function () {
+    document.body.classList.add('fade-in');
+});
