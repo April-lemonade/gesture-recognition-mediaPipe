@@ -25,7 +25,7 @@ const videoHeight = "360px";
 const videoWidth = "720px";
 let lastResult = "";
 let lastResults = [];
-let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"], ["phoenix0", "phoenix1"]];
+let steps = [["wan0", "wan1", "wan2"], ["turtle0", "turtle1"], ["phoenix0", "phoenix1"], ["gui0", "gui1"], ["hui0", "hui1"], ["qian0", "qian1"]];
 let currentCount = 0;
 const gestureImg = document.getElementById("gestureImg");
 let newGes;
@@ -35,6 +35,7 @@ const ingSounds = [
     ["ing_syn_0_1.wav", "ing_syn_1_1.wav", "ing_ope_0_1.wav", "ing_ope_1_1.wav"]
 ];
 const edSounds = ["ed_syn_0.wav", "ed_syn_1.wav", "ed_ope_0.wav", "ed_ope_1.wav"];
+const bgColors = ["#3D4D1D", "#261E20", "#962328", "#35441C", "#364779", "#962328"]
 let soundIndex;
 let edSoundIndex;
 const gestureInfo = [
@@ -65,7 +66,7 @@ const createGestureRecognizer = async () => {
     const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm");
     gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
         baseOptions: {
-            modelAssetPath: './gesture_recognizer.task',
+            modelAssetPath: './gesture_recognizer (3).task',
             delegate: "GPU",
             num_hands: num_hand
         },
@@ -111,6 +112,7 @@ function newGesture() {
         // location.reload();
         window.location.href = "index.html"
     }
+    document.body.style.backgroundColor = bgColors[index];
     console.log("index", index);
     newGes = steps[index];
     gestureImg.src = "/img/" + newGes[0] + ".png";
@@ -268,17 +270,23 @@ async function predictWebcam() {
         //     categoryName = "turtle0";
         //     categoryName1 = "turtle0";
         // }
-        if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 55 && categoryScore > 55) {
+
+        // if (categoryName === "wan0" && categoryScore > 90 && categoryName1 !== "none") {
+        //     categoryName1 = "wan0"
+        // }
+
+        if (categoryName === categoryName1 && categoryName === newGes[currentCount] && categoryScore1 > 50 && categoryScore > 50) {
             // progressValue.style.width = "0%";
             console.log(categoryName)
+
             finalOutput.innerText = categoryName;
             // 第一次比出这个手势
             if (lastResults.filter((item) => item === categoryName).length === 100 && currentCount < newGes.length && categoryName !== lastResult) {
                 progressValue.style.width = "100%";
                 lastResults = [];
                 gestureName.style.border = "double 3px white";
-                gestureName.innerText = gestureInfo[index].name;
-                gestureDetail.innerHTML = gestureInfo[index].detail;
+                // gestureName.innerText = gestureInfo[index].name;
+                // gestureDetail.innerHTML = gestureInfo[index].detail;
                 info[0].style.opacity = 1;
                 info[1].style.opacity = 1;
                 lastResult = categoryName
@@ -303,8 +311,8 @@ async function predictWebcam() {
                 progressValue.style.width = `${lastResults.filter((item) => item === newGes[currentCount]).length}%`;
             } else if (lastResults[lastResults.length - 1] !== categoryName) { // 检测手势在变化
                 lastResults = [];
-                gestureImg.style.opacity = "1";
-                reminder.style.opacity = "1";
+                // gestureImg.style.opacity = "1";
+                // reminder.style.opacity = "1";
             }
         } else {
             finalOutput.innerText = "none";

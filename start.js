@@ -201,7 +201,7 @@ async function predictWebcam() {
         categoryName1 = results.gestures[1][0].categoryName;
         const categoryScore1 = parseFloat(results.gestures[1][0].score * 100).toFixed(2);
 
-        if (categoryName === categoryName1 && categoryScore1 > 80 && categoryScore > 80 && categoryName === "start") {
+        if (categoryName === categoryName1 && categoryScore1 > 85 && categoryScore > 85 && categoryName === "start") {
             console.log(categoryName)
             document.body.classList.add('fade-in');
             window.location.href = "content.html"
